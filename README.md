@@ -299,11 +299,11 @@ end
 
 ### Search Parameters
 ```ruby
-# GET /flights?departure_airport_id=1&arrival_airport_id=2&date=2024-01-15&num_passengers=2
+# GET /flights?departure_airport_id=1&arrival_airport_id=2&date=2025-01-15&num_passengers=2
 params = {
   departure_airport_id: "1",
   arrival_airport_id: "2", 
-  date: "2024-01-15",
+  date: "2025-01-15",
   num_passengers: "2"
 }
 ```
