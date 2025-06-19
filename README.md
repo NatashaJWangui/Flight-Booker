@@ -1,81 +1,122 @@
-# NJW Flight Booker ✈️
+# NJW Flight Booker ✈️ - International Edition
 
 This is part of the Advanced Forms Project in The Odin Project's Ruby on Rails Curriculum. Find it at https://www.theodinproject.com
 
-A comprehensive one-way flight booking application that demonstrates advanced Rails forms, nested attributes, complex queries, and multi-step user workflows. Built with Ruby on Rails and PostgreSQL to showcase enterprise-level form handling and user experience design.
+A comprehensive international flight booking application featuring routes across **North America, Europe, and Africa**. Demonstrates advanced Rails forms, nested attributes, complex queries, multi-step workflows, and professional email confirmations. Built with Ruby on Rails and PostgreSQL to showcase enterprise-level form handling and user experience design.
 
-## Features
+## 🌍 Live Demo
+
+🌐 **Live Application**: [Deploy to Render - Coming Soon!]  
+✈️ **Book real international flights** across three continents  
+📧 **Receive beautiful confirmation emails** for your bookings  
+🎨 **Experience the elegant burgundy theme**  
+🇺🇸🇬🇧🇳🇱🇰🇪 **Fly anywhere in the world**  
+
+## ✨ Features
 
 - **Advanced Search**: Multi-parameter flight search with airports, dates, and passengers
+- **International Routes**: Flights spanning North America, Europe, and Africa (🇺🇸🇬🇧🇳🇱🇰🇪)
 - **Dynamic Flight Results**: Real-time filtering and display of available flights
 - **Complex Form Handling**: Nested passenger information forms with validation
 - **Multi-step Workflow**: Search → Select → Book → Confirm process
-- **Professional UI**: Airline-quality interface with responsive design
+- **Email Confirmations**: Beautiful HTML email confirmations sent to all passengers
+- **Professional UI**: Airline-quality burgundy-themed responsive interface
 - **PostgreSQL Database**: Production-ready database with complex relationships
 - **Smart Validation**: Client and server-side validation with error handling
-- **Booking Management**: Complete booking lifecycle with confirmation
+- **Booking Management**: Complete booking lifecycle with confirmation numbers
 
-## Technologies Used
+## 🌍 International Coverage
+
+### 🇺🇸 United States
+- **SFO** - San Francisco International Airport
+- **LAX** - Los Angeles International Airport  
+- **JFK** - John F. Kennedy International Airport
+- **ORD** - Chicago O'Hare International Airport
+- **ATL** - Hartsfield-Jackson Atlanta International Airport
+- **MIA** - Miami International Airport
+- **SEA** - Seattle-Tacoma International Airport
+- **DEN** - Denver International Airport
+- **LAS** - McCarran International Airport
+- **PHX** - Phoenix Sky Harbor International Airport
+
+### 🇪🇺 Europe
+- **LHR** - London Heathrow Airport 🇬🇧
+- **AMS** - Amsterdam Airport Schiphol 🇳🇱
+
+### 🇰🇪 Africa
+- **JKA** - Jomo Kenyatta International Airport, Nairobi
+
+### ✈️ Epic Route Examples
+- **Transatlantic Adventure**: JFK ↔ LHR (7-8 hours) 🌊
+- **Transcontinental Journey**: SFO ↔ JFK (5.5-6 hours) 🇺🇸
+- **African Safari Route**: JFK ↔ JKA (15-16 hours) 🦁
+- **European Business Hop**: LHR ↔ AMS (1.5 hours) 💼
+- **Pacific to Africa Epic**: SFO ↔ JKA (17-18 hours) 🌍
+
+## 🛠️ Technologies Used
 
 - **Ruby**: 3.4.4
 - **Rails**: 8.0.2
-- **PostgreSQL**: Production-grade database
+- **PostgreSQL**: Production-grade international database
+- **ActionMailer**: Professional email confirmation system
+- **Letter Opener**: Development email testing
 - **Advanced Forms**: `accepts_nested_attributes_for`, `fields_for`
-- **Complex Queries**: Multi-table joins and filtering
+- **Complex Queries**: Multi-table joins and filtering across continents
 - **Date Handling**: Rails DateHelper and datetime manipulation
-- **Responsive CSS**: Modern UI with mobile support
+- **Responsive CSS**: Modern burgundy-themed UI with mobile support
+- **International Coverage**: Multi-continent flight network
 
-## Application Architecture
+## 🏗️ Application Architecture
 
 ### Models & Relationships
 
 ```ruby
-# Airport Model
-- airport_code: string (3 chars, unique)
+# Airport Model - International airports across 3 continents
+- airport_code: string (3 chars, unique) # SFO, LHR, JKA, etc.
 - name: string
 - has_many :departing_flights, :arriving_flights
 
-# Flight Model  
+# Flight Model - International and domestic routes
 - departure_airport_id: references
 - arrival_airport_id: references
 - start_datetime: datetime
-- duration: integer (minutes)
+- duration: integer (minutes) # 90 min domestic to 18+ hours international
 - belongs_to :departure_airport, :arrival_airport
 - has_many :bookings
 
-# Booking Model
+# Booking Model - Complete booking management
 - flight_id: references
 - total_passengers: integer
 - belongs_to :flight
 - has_many :passengers
 - accepts_nested_attributes_for :passengers
 
-# Passenger Model
+# Passenger Model - Individual traveler information
 - booking_id: references
 - name: string
-- email: string
+- email: string (receives confirmation emails)
 - belongs_to :booking
 ```
 
 ### Database Schema
 
 ```sql
--- Airports Table
+-- Airports Table (13 international airports)
 CREATE TABLE airports (
   id SERIAL PRIMARY KEY,
-  airport_code VARCHAR(3) UNIQUE NOT NULL,
+  airport_code VARCHAR(3) UNIQUE NOT NULL, -- SFO, LHR, JKA, etc.
   name VARCHAR NOT NULL,
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
 
--- Flights Table
+-- Flights Table (4000+ international routes)
 CREATE TABLE flights (
   id SERIAL PRIMARY KEY,
   departure_airport_id INTEGER REFERENCES airports(id),
   arrival_airport_id INTEGER REFERENCES airports(id),
   start_datetime TIMESTAMP NOT NULL,
-  duration INTEGER NOT NULL,
+  duration INTEGER NOT NULL, -- Minutes: 75 (LHR-AMS) to 1080 (LAX-JKA)
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
@@ -89,18 +130,42 @@ CREATE TABLE bookings (
   updated_at TIMESTAMP
 );
 
--- Passengers Table
+-- Passengers Table (Email confirmation recipients)
 CREATE TABLE passengers (
   id SERIAL PRIMARY KEY,
   booking_id INTEGER REFERENCES bookings(id),
   name VARCHAR NOT NULL,
-  email VARCHAR NOT NULL,
+  email VARCHAR NOT NULL, -- Receives beautiful confirmation emails
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
 ```
 
-## Installation
+## 📧 Email Confirmation System
+
+### Beautiful HTML Email Templates
+- **Professional Design**: Burgundy-themed email templates
+- **Flight Details**: Complete itinerary with times and airports
+- **Passenger Information**: Personalized for each traveler
+- **Travel Instructions**: Airport arrival times and requirements
+- **Responsive Design**: Works on desktop and mobile email clients
+
+### Email Features
+```ruby
+# Automatic email sending after booking
+@booking.passengers.each do |passenger|
+  PassengerMailer.confirmation_email(passenger).deliver_now
+end
+
+# Email includes:
+- Confirmation number
+- Flight route and times  
+- Passenger details
+- Travel instructions
+- Professional airline branding
+```
+
+## 🚀 Installation
 
 ### Prerequisites
 - Ruby 3.0 or higher
@@ -126,10 +191,10 @@ CREATE TABLE passengers (
    # macOS: brew services start postgresql
    # Ubuntu: sudo service postgresql start
    
-   # Create and setup database
+   # Create and setup database with international routes
    rails db:create
    rails db:migrate
-   rails db:seed  # Creates airports and flights
+   rails db:seed  # Creates 13 airports and 4000+ international flights
    ```
 
 4. **Start the server**
@@ -140,404 +205,309 @@ CREATE TABLE passengers (
 5. **Visit the application**
    Open your browser and navigate to `http://localhost:3000`
 
-## User Journey
+6. **Test email confirmations**
+   - Book a flight with valid email addresses
+   - Letter Opener will show confirmation emails in browser
 
-### Step 1: Flight Search
-- **Departure Airport**: Select from available airports
-- **Arrival Airport**: Choose destination airport  
-- **Date**: Pick from dates with available flights
+## 🛫 User Journey
+
+### Step 1: International Flight Search
+- **Departure Airport**: Choose from 13 international airports
+- **Arrival Airport**: Select destination across 3 continents  
+- **Date**: Pick from dates with available flights (next 30 days)
 - **Passengers**: Select 1-4 passengers
-- **Search**: Find matching flights
+- **Search**: Find matching international routes
 
 ### Step 2: Flight Selection
-- **View Results**: See available flights with details
-- **Flight Cards**: Route, times, duration, flight number
+- **View Results**: See available flights with realistic durations
+- **Flight Cards**: Route, times, duration (90 min to 18+ hours), flight number
+- **International Routes**: Clear continent indicators
 - **Radio Selection**: Choose preferred flight
 - **Book Flight**: Proceed to passenger information
 
 ### Step 3: Passenger Information
-- **Flight Summary**: Review selected flight details
+- **Flight Summary**: Review selected international flight details
 - **Passenger Forms**: Dynamic forms for each passenger
+- **Email Collection**: Required for confirmation emails
 - **Validation**: Name and email required for each passenger
-- **Cost Calculation**: Automatic pricing based on flight and passengers
+- **Cost Calculation**: Automatic pricing based on flight distance and passengers
 - **Complete Booking**: Submit all passenger information
 
-### Step 4: Booking Confirmation
-- **Confirmation Number**: Unique booking reference
-- **Flight Details**: Complete itinerary information
+### Step 4: Booking Confirmation & Email
+- **Confirmation Number**: Unique booking reference (e.g., #OA000123)
+- **Flight Details**: Complete international itinerary information
 - **Passenger List**: All traveler information
 - **Payment Summary**: Detailed cost breakdown
-- **Next Steps**: Travel preparation instructions
+- **Email Delivery**: Beautiful confirmation emails sent to each passenger
+- **Travel Instructions**: International travel requirements and timing
 
-## Key Features Deep Dive
+## 🔧 Key Features Deep Dive
 
-### Advanced Form Handling
+### Advanced International Route Management
 
-#### Multi-Parameter Search
+#### Realistic Flight Durations
 ```ruby
-# FlightsController#index
-def index
-  @airports = Airport.all.order(:airport_code)
-  @flight_dates = Flight.distinct.pluck(:start_datetime).map(&:to_date).uniq.sort
+route_durations = {
+  # US Domestic Routes
+  'SFO-LAX' => 90, 'LAX-SFO' => 90,
+  'SFO-JFK' => 330, 'JFK-SFO' => 360,
   
-  if params[:departure_airport_id].present?
-    @flights = Flight.includes(:departure_airport, :arrival_airport)
-                    .departing_from(params[:departure_airport_id])
-                    .arriving_at(params[:arrival_airport_id])
-                    .on_date(params[:date])
-                    .order(:start_datetime)
-  end
+  # Transatlantic Routes (US to Europe)
+  'JFK-LHR' => 420, 'LHR-JFK' => 480,  # 7-8 hours
+  'SFO-LHR' => 660, 'LHR-SFO' => 720,  # 11-12 hours
+  
+  # US to Africa (Epic long-haul)
+  'JFK-JKA' => 900, 'JKA-JFK' => 960,   # 15-16 hours
+  'SFO-JKA' => 1020, 'JKA-SFO' => 1080, # 17-18 hours
+  
+  # Europe to Africa
+  'LHR-JKA' => 510, 'JKA-LHR' => 540,   # 8.5-9 hours
+  'AMS-JKA' => 480, 'JKA-AMS' => 510,   # 8-8.5 hours
+  
+  # European Routes
+  'LHR-AMS' => 75, 'AMS-LHR' => 80,     # 1.5 hours
+}
+```
+
+#### Smart Flight Frequency
+```ruby
+# Popular international routes have more flights
+flight_probability = case route_key
+when ['JFK-LHR', 'LHR-JFK', 'SFO-LHR', 'LHR-SFO']
+  0.8  # 80% chance - daily international flights
+when ['LHR-JKA', 'JKA-LHR', 'AMS-JKA', 'JKA-AMS']
+  0.7  # 70% chance - daily flights to African hub
+when route_key.match(/JKA/) # Routes to/from Kenya
+  0.3  # 30% chance - limited long-haul routes
 end
 ```
 
-#### Nested Attributes Implementation
-```ruby
-# Booking Model
-class Booking < ApplicationRecord
-  belongs_to :flight
-  has_many :passengers, dependent: :destroy
-  
-  accepts_nested_attributes_for :passengers
-  
-  validates :total_passengers, presence: true, numericality: { in: 1..4 }
-  validates :passengers, length: { minimum: 1 }
-end
+### Professional Email System
 
-# BookingsController#new
-def new
-  @flight = Flight.find(params[:flight_id])
-  @num_passengers = params[:num_passengers].to_i
-  
-  @booking = Booking.new(flight: @flight, total_passengers: @num_passengers)
-  
-  # Create blank passenger objects for the form
-  @num_passengers.times { @booking.passengers.build }
-end
-```
+#### HTML Email Template
+```html
+<div class="header">
+  <h1>✈️ Flight Confirmation</h1>
+  <h2>Odin Airlines</h2>
+</div>
 
-#### Dynamic Form Generation
-```erb
-<!-- Passenger Information Forms -->
-<%= form.fields_for :passengers do |passenger_form| %>
-  <div class="passenger-card">
-    <h3>Passenger <%= passenger_form.index + 1 %></h3>
-    
-    <div class="form-row">
-      <div class="form-group">
-        <%= passenger_form.label :name, "Full Name" %>
-        <%= passenger_form.text_field :name, class: "form-control" %>
-      </div>
-      
-      <div class="form-group">
-        <%= passenger_form.label :email, "Email Address" %>
-        <%= passenger_form.email_field :email, class: "form-control" %>
-      </div>
-    </div>
+<div class="flight-route">
+  <div class="airport">
+    <div>JFK</div>
+    <small>John F. Kennedy International Airport</small>
   </div>
-<% end %>
+  <div class="arrow">✈️</div>
+  <div class="airport">
+    <div>JKA</div>
+    <small>Jomo Kenyatta International Airport</small>
+  </div>
+</div>
+```
+
+#### Multi-Passenger Email Delivery
+```ruby
+# Send individual emails to each passenger
+@booking.passengers.each do |passenger|
+  PassengerMailer.confirmation_email(passenger).deliver_now
+end
 ```
 
 ### Complex Database Queries
 
-#### Flight Search Scopes
+#### International Flight Search Scopes
 ```ruby
 # Flight Model Scopes
 scope :departing_from, ->(airport_id) { where(departure_airport_id: airport_id) }
 scope :arriving_at, ->(airport_id) { where(arrival_airport_id: airport_id) }
 scope :on_date, ->(date) { where('DATE(start_datetime) = ?', date) }
 
-# Usage
+# Usage for international searches
 @flights = Flight.includes(:departure_airport, :arrival_airport)
+                .where('start_datetime > ?', Time.current)  # Only future flights
                 .departing_from(params[:departure_airport_id])
                 .arriving_at(params[:arrival_airport_id])
                 .on_date(params[:date])
                 .order(:start_datetime)
 ```
 
-#### Association Queries
-```ruby
-# Airport associations with custom foreign keys
-has_many :departing_flights, class_name: 'Flight', foreign_key: 'departure_airport_id'
-has_many :arriving_flights, class_name: 'Flight', foreign_key: 'arrival_airport_id'
-
-# Flight associations with custom class names
-belongs_to :departure_airport, class_name: 'Airport'
-belongs_to :arrival_airport, class_name: 'Airport'
-```
-
-### Data Seeding Strategy
-
-#### Realistic Flight Data
-```ruby
-# Smart route-based flight scheduling
-route_durations = {
-  'SFO-LAX' => 90, 'LAX-SFO' => 90,
-  'SFO-JFK' => 330, 'JFK-SFO' => 360,
-  'LAX-JFK' => 310, 'JFK-LAX' => 340
-}
-
-# Popular routes have more flights
-num_flights = case route_key
-when 'SFO-LAX', 'LAX-SFO', 'SFO-JFK', 'JFK-SFO'
-  rand < 0.8 ? departure_times.sample(rand(2..4)) : []
-else
-  rand < 0.3 ? departure_times.sample(rand(1..2)) : []
-end
-```
-
-## Routes
+## 🛣️ Routes
 
 | HTTP Method | Path | Controller#Action | Purpose |
 |-------------|------|------------------|---------|
-| GET | / | flights#index | Flight search and results |
+| GET | / | flights#index | International flight search and results |
 | GET | /flights | flights#index | Flight search and results |
 | GET | /bookings/new | bookings#new | Passenger information form |
-| POST | /bookings | bookings#create | Create new booking |
+| POST | /bookings | bookings#create | Create booking + send emails |
 | GET | /bookings/:id | bookings#show | Booking confirmation |
 
-## Form Parameter Flow
-
-### Search Parameters
-```ruby
-# GET /flights?departure_airport_id=1&arrival_airport_id=2&date=2025-01-15&num_passengers=2
-params = {
-  departure_airport_id: "1",
-  arrival_airport_id: "2", 
-  date: "2025-01-15",
-  num_passengers: "2"
-}
-```
-
-### Flight Selection Parameters  
-```ruby
-# GET /bookings/new?flight_id=5&num_passengers=2
-params = {
-  flight_id: "5",
-  num_passengers: "2"
-}
-```
-
-### Booking Creation Parameters
-```ruby
-# POST /bookings
-params = {
-  booking: {
-    flight_id: "5",
-    total_passengers: "2",
-    passengers_attributes: {
-      "0" => { name: "John Doe", email: "john@example.com" },
-      "1" => { name: "Jane Doe", email: "jane@example.com" }
-    }
-  }
-}
-```
-
-## Validation & Error Handling
-
-### Model Validations
-```ruby
-# Airport validations
-validates :airport_code, presence: true, uniqueness: true, length: { is: 3 }
-validates :name, presence: true
-
-# Flight validations  
-validates :start_datetime, presence: true
-validates :duration, presence: true, numericality: { greater_than: 0 }
-
-# Booking validations
-validates :total_passengers, presence: true, numericality: { in: 1..4 }
-validates :passengers, length: { minimum: 1 }
-
-# Passenger validations
-validates :name, presence: true
-validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-```
-
-### Controller Error Handling
-```ruby
-# BookingsController
-def create
-  @booking = Booking.new(booking_params)
-  
-  if @booking.save
-    redirect_to @booking, notice: 'Booking was successfully created!'
-  else
-    @flight = @booking.flight
-    @num_passengers = @booking.total_passengers
-    # Rebuild passenger objects if validation fails
-    while @booking.passengers.length < @num_passengers
-      @booking.passengers.build
-    end
-    render :new, status: :unprocessable_entity
-  end
-end
-```
-
-## Testing
+## 📋 Testing
 
 ### Manual Testing Checklist
 
-#### Search Functionality
-- [ ] Can select different airport combinations
-- [ ] Date field properly restricts to available dates
-- [ ] Passenger count validation (1-4 passengers)
-- [ ] Search returns appropriate results
-- [ ] "No results" message displays when no flights found
-- [ ] Form retains values after search
+#### International Flight Search
+- [ ] Can search JFK → LHR (New York to London)
+- [ ] Can search SFO → JKA (San Francisco to Nairobi)
+- [ ] Can search LHR → AMS (London to Amsterdam)
+- [ ] Flight durations show correctly (7+ hours for international)
+- [ ] All 13 airports appear in dropdowns
+- [ ] Date picker shows available flight dates
 
-#### Flight Selection
-- [ ] Flight cards display all necessary information
-- [ ] Radio button selection works correctly  
-- [ ] Flight details (times, duration, airports) are accurate
-- [ ] Can proceed to booking with valid selection
-- [ ] Error handling for missing flight selection
+#### Booking & Email System
+- [ ] Can book international flights with multiple passengers
+- [ ] Email confirmations sent to each passenger
+- [ ] HTML emails display correctly in browser (Letter Opener)
+- [ ] Email includes flight details, times, and airports
+- [ ] Confirmation numbers generate properly
 
-#### Passenger Information
-- [ ] Correct number of passenger forms generated
-- [ ] Name validation works (required field)
-- [ ] Email validation works (required, proper format)
-- [ ] Form retains data on validation errors
-- [ ] Cost calculation displays correctly
-- [ ] Flight summary shows selected flight details
-
-#### Booking Confirmation
-- [ ] Confirmation number generates and displays
-- [ ] All flight details are accurate
-- [ ] All passenger information is correct
-- [ ] Cost breakdown is accurate
-- [ ] Print functionality works
-- [ ] Navigation links work properly
+#### International Route Validation
+- [ ] Long-haul flights show realistic durations (15-18 hours)
+- [ ] Short European flights show correct times (1.5 hours)
+- [ ] Transatlantic flights show proper durations (7-12 hours)
+- [ ] All continent combinations work
 
 ### Console Testing
 ```ruby
-# Test associations
-airport = Airport.first
-airport.departing_flights.count  # Flights departing from this airport
-airport.arriving_flights.count   # Flights arriving at this airport
+# Test international routes
+jfk = Airport.find_by(airport_code: 'JFK')
+jka = Airport.find_by(airport_code: 'JKA')
+lhr = Airport.find_by(airport_code: 'LHR')
 
-flight = Flight.first
-flight.departure_airport.name    # Departure airport name
-flight.arrival_airport.name     # Arrival airport name
-flight.bookings.count           # Number of bookings for this flight
+# Check flight availability
+Flight.departing_from(jfk.id).arriving_at(jka.id).count  # US to Africa
+Flight.departing_from(jfk.id).arriving_at(lhr.id).count  # US to Europe
+Flight.departing_from(lhr.id).arriving_at(jka.id).count  # Europe to Africa
 
-booking = Booking.first
-booking.flight.start_datetime   # Flight departure time
-booking.passengers.count        # Number of passengers
-booking.total_cost             # Total booking cost
-
-# Test scopes
-Flight.departing_from(1).count          # Flights from airport ID 1
-Flight.on_date(Date.current).count      # Flights today
-Flight.includes(:departure_airport, :arrival_airport).first.departure_airport.name
+# Test email system
+booking = Booking.includes(:passengers, flight: [:departure_airport, :arrival_airport]).first
+passenger = booking.passengers.first
+PassengerMailer.confirmation_email(passenger).deliver_now!
 ```
 
-## Security Considerations
+## 🔒 Security Considerations
 
-### Parameter Security
-- **Strong Parameters**: Whitelisted form parameters prevent mass assignment
-- **Nested Attributes**: Properly configured to accept only allowed passenger fields
-- **Input Validation**: Server-side validation for all user inputs
-- **SQL Injection Prevention**: ActiveRecord parameterized queries
+### International Data Protection
+- **GDPR Compliance**: Email handling for European passengers
+- **Data Validation**: International name and email format validation
+- **Secure Transactions**: PostgreSQL with foreign key constraints
+- **Parameter Security**: Strong parameters for all international route data
 
-### Data Validation
-- **Required Fields**: All critical information validated for presence
-- **Format Validation**: Email format validation
-- **Numerical Constraints**: Passenger count limited to realistic range
-- **Date Validation**: Prevents booking flights in the past
+### Multi-Continent Security
+- **Time Zone Handling**: Proper UTC storage for international flights
+- **Input Sanitization**: Protection against international character exploits
+- **Email Security**: Secure SMTP for international email delivery
 
-## Performance Considerations
+## 🚀 Deployment
 
-### Database Optimization
-- **Indexes**: Foreign key columns automatically indexed
-- **Eager Loading**: `includes()` prevents N+1 queries in flight listings
-- **Scopes**: Efficient database queries for flight search
-- **Query Optimization**: Minimal database calls in views
-
-### Future Optimizations
-- **Caching**: Page caching for airport lists and flight search
-- **Background Jobs**: Email confirmations and notifications
-- **API Integration**: Real-time flight data updates
-- **Search Indexing**: Full-text search capabilities
-
-## Deployment
-
-### Heroku Deployment
+### Render Deployment (Recommended)
 ```bash
-# Prepare for production
+# Prepare for international production deployment
 echo "ruby '3.4.4'" >> Gemfile
 bundle install
 
-# Create Heroku app
-heroku create your-flight-booker
-heroku addons:create heroku-postgresql:mini
+# Create render.yaml for international app
+cat > render.yaml << EOF
+databases:
+  - name: flight-booker-db
+    databaseName: flight_booker_production
+    user: flight_booker
 
-# Deploy
-git push heroku main
-heroku run rails db:migrate
-heroku run rails db:seed
+services:
+  - type: web
+    name: flight-booker
+    runtime: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+EOF
 
-# Set environment variables
-heroku config:set RAILS_MASTER_KEY=your_master_key
+# Deploy with international flight data
+git push origin main
 ```
 
-### Production Considerations
-- **Database Connection Pooling**: Configure for concurrent users
-- **Asset Pipeline**: Precompile assets for production
-- **Error Monitoring**: Add services like Rollbar or Sentry
-- **Performance Monitoring**: Add APM tools for database query analysis
+### Production Email Setup
+```ruby
+# config/environments/production.rb
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.default_url_options = { 
+  host: ENV['RENDER_EXTERNAL_HOSTNAME'], 
+  protocol: 'https' 
+}
 
-## Future Enhancements
+config.action_mailer.smtp_settings = {
+  address: 'smtp.sendgrid.net',  # For international email delivery
+  port: 587,
+  domain: ENV['RENDER_EXTERNAL_HOSTNAME'],
+  user_name: ENV['SENDGRID_USERNAME'],
+  password: ENV['SENDGRID_PASSWORD'],
+  authentication: 'plain',
+  enable_starttls_auto: true
+}
+```
 
-### User Experience
-- **User Accounts**: Save booking history and preferences
-- **Multi-city Trips**: Support for complex itineraries
-- **Seat Selection**: Visual seat maps and preferences
-- **Mobile App**: Native iOS/Android applications
-- **Real-time Updates**: Flight status and gate changes
+## 🌟 Future Enhancements
+
+### International Expansion
+- **More Continents**: Add Asian and Australian airports
+- **Currency Support**: Multi-currency pricing for international routes
+- **Time Zones**: Display local times for international flights
+- **Languages**: Multi-language support for international passengers
+- **Visas**: Visa requirement notifications for international travel
+
+### Advanced Features
+- **Seat Selection**: International aircraft seat maps
+- **Layovers**: Multi-stop international routing
+- **Alliance Partners**: Codeshare international flights
+- **Loyalty Program**: Frequent flyer miles for international routes
+- **Weather Integration**: Destination weather for international travel
 
 ### Business Features
-- **Payment Integration**: Stripe or PayPal integration
-- **Pricing Engine**: Dynamic pricing based on demand
-- **Loyalty Program**: Frequent flyer miles and rewards
-- **Corporate Accounts**: Business travel management
-- **Group Bookings**: Special handling for large groups
+- **Dynamic Pricing**: Distance-based international pricing
+- **Group Bookings**: International group travel management
+- **Corporate Accounts**: Business international travel
+- **Travel Insurance**: International travel insurance options
 
-### Technical Improvements
-- **API Development**: RESTful API for third-party integrations
-- **Microservices**: Split into booking, payment, and notification services
-- **Real-time Data**: Integration with airline reservation systems
-- **Machine Learning**: Price prediction and recommendation engine
-- **Advanced Search**: Filters for price range, airlines, stops
+## 📊 Project Statistics
 
-## Contributing
+🌍 **Coverage**: 3 Continents (North America, Europe, Africa)  
+✈️ **Airports**: 13 International airports  
+🛫 **Routes**: 4000+ International flight combinations  
+📧 **Emails**: Beautiful HTML confirmations for every passenger  
+⏱️ **Flight Range**: 75 minutes (LHR-AMS) to 18+ hours (SFO-JKA)  
+🎨 **Theme**: Professional burgundy airline design  
+💻 **Technology**: Enterprise-level Rails architecture  
+
+## 🤝 Contributing
 
 1. Fork the project
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create a feature branch (`git checkout -b feature/amazing-international-feature`)
+3. Commit your changes (`git commit -m 'Add amazing international feature'`)
+4. Push to the branch (`git push origin feature/amazing-international-feature`)
 5. Open a Pull Request
 
-## Resources
+## 📚 Resources
 
 - [Rails Guides - Form Helpers](https://guides.rubyonrails.org/form_helpers.html)
 - [Rails API - accepts_nested_attributes_for](https://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html)
+- [ActionMailer Guide](https://guides.rubyonrails.org/action_mailer_basics.html)
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 - [Rails Guides - Active Record Query Interface](https://guides.rubyonrails.org/active_record_querying.html)
 - [The Odin Project](https://www.theodinproject.com/)
 
-## License
+## 📄 License
 
-This project is for educational purposes.
+This project is for educational purposes as part of The Odin Project curriculum.
 
-## Acknowledgments
+## 🙏 Acknowledgments
 
-- The Odin Project for the comprehensive advanced forms curriculum
-- PostgreSQL community for the powerful database system
-- Rails community for excellent form handling capabilities
-- All developers contributing to complex Rails application patterns
+- **The Odin Project** for the comprehensive advanced forms curriculum
+- **PostgreSQL Community** for the powerful international database system
+- **Rails Community** for excellent form handling and email capabilities
+- **International Aviation** for inspiring realistic flight routes and durations
+- **All developers** contributing to complex Rails application patterns
 
 ---
 
 **Project completed as part of The Odin Project - Ruby on Rails Course**
 
-*Taking flight with advanced Rails forms and enterprise-level user experiences! ✈️*
+*Taking flight with advanced Rails forms, international routes, and enterprise-level user experiences! ✈️🌍*
+
+**Ready for takeoff to any destination worldwide! 🇺🇸🇬🇧🇳🇱🇰🇪**
