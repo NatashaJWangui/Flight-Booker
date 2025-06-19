@@ -1,13 +1,52 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <style>
-      /* Email styles need to be inline */
+      /* Email-safe styles */
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+      
+      table {
+        border-collapse: collapse !important;
+      }
+      
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+      }
+      
+      @media only screen and (max-width: 600px) {
+        .container {
+          width: 100% !important;
+        }
+        
+        .route {
+          flex-direction: column !important;
+        }
+        
+        .airport {
+          margin-bottom: 10px;
+        }
+      }
     </style>
   </head>
 
   <body>
-    <%= yield %>
+    <div class="container">
+      <%= yield %>
+    </div>
   </body>
 </html>

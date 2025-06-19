@@ -1,0 +1,42 @@
+✈️ FLIGHT CONFIRMATION - NJW AIRLINES
+========================================
+
+Hello <%= @passenger.name %>!
+
+Thank you for booking with NJW Airlines! Your flight has been confirmed.
+
+🎫 FLIGHT DETAILS
+-----------------
+Confirmation Number: #OA<%= @booking.id.to_s.rjust(6, '0') %>
+Flight Number: OA<%= @flight.id %>
+
+Route: <%= @flight.departure_airport.airport_code %> → <%= @flight.arrival_airport.airport_code %>
+From: <%= @flight.departure_airport.name %>
+To: <%= @flight.arrival_airport.name %>
+
+Departure Date: <%= @flight.start_datetime.strftime("%B %d, %Y") %>
+Departure Time: <%= @flight.formatted_departure_time %>
+Arrival Time: <%= @flight.formatted_arrival_time %>
+Flight Duration: <%= @flight.duration_formatted %>
+
+Passenger Name: <%= @passenger.name %>
+Total Passengers: <%= @booking.total_passengers %>
+
+📋 IMPORTANT INFORMATION
+------------------------
+🆔 Please bring valid government-issued photo ID
+🕐 Arrive at the airport at least 2 hours before departure
+🧳 Check baggage allowances and restrictions
+📱 Download the NJW Airlines app for real-time updates
+✅ Online check-in opens 24 hours before departure
+
+View your full booking details:
+http://localhost:3000/bookings/<%= @booking.id %>
+
+Safe travels! ✈️
+
+The NJW Airlines Team
+
+========================================
+© 2025 NJW Airlines | Your Journey, Our Passion
+Need help? Contact us at support@njwairlines.com

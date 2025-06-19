@@ -22,6 +22,11 @@ class BookingsController < ApplicationController
     @flight = @booking.flight
 
     if @booking.save
+      # Send confirmation email to each passenger
+      @booking.passengers.each do |passenger|
+        PassengerMailer.confirmation_email(passenger).deliver_now
+      end
+
       redirect_to @booking, notice: "Booking was successfully created!"
     else
       @num_passengers = @booking.total_passengers
