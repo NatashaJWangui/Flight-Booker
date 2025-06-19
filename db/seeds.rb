@@ -18,6 +18,7 @@ Airport.destroy_all
 airports = Airport.create!([
   { airport_code: 'SFO', name: 'San Francisco International Airport' },
   { airport_code: 'LAX', name: 'Los Angeles International Airport' },
+  { airport_code: 'JKA', name: 'Jomo Kenyatta International Airport' },
   { airport_code: 'JFK', name: 'John F. Kennedy International Airport' },
   { airport_code: 'ORD', name: 'Chicago O\'Hare International Airport' },
   { airport_code: 'MIA', name: 'Miami International Airport' },
@@ -26,6 +27,7 @@ airports = Airport.create!([
   { airport_code: 'ATL', name: 'Hartsfield-Jackson Atlanta International Airport' },
   { airport_code: 'LAS', name: 'McCarran International Airport' },
   { airport_code: 'PHX', name: 'Phoenix Sky Harbor International Airport' }
+
 ])
 
 puts "Created #{Airport.count} airports"
