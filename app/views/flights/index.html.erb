@@ -1,0 +1,106 @@
+<div class="container">
+  <div class="header-section">
+    <h1>🛫 Odin Airlines</h1>
+    <p class="subtitle">Find your perfect flight</p>
+  </div>
+
+  <!-- Search Form -->
+  <div class="search-section">
+    <h2>Search Flights</h2>
+    
+    <%= form_with url: flights_path, method: :get, local: true, class: "search-form" do |form| %>
+      <div class="form-row">
+        <div class="form-group">
+          <%= form.label :departure_airport_id, "From" %>
+          <%= form.collection_select :departure_airport_id, @airports, :id, :to_s, 
+                                    { prompt: "Select departure airport" }, 
+                                    { class: "form-control" } %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :arrival_airport_id, "To" %>
+          <%= form.collection_select :arrival_airport_id, @airports, :id, :to_s, 
+                                    { prompt: "Select arrival airport" }, 
+                                    { class: "form-control" } %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :date, "Departure Date" %>
+          <%= form.date_field :date, 
+                             value: params[:date], 
+                             min: Date.current,
+                             max: Date.current + 30.days,
+                             class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :num_passengers, "Passengers" %>
+          <%= form.select :num_passengers, @passenger_options, 
+                         { selected: params[:num_passengers] || 1 }, 
+                         { class: "form-control" } %>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Search Flights", class: "btn btn-primary btn-large" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Search Results -->
+  <% if @flights %>
+    <div class="results-section">
+      <h2>Available Flights</h2>
+      
+      <% if @flights.any? %>
+        <%= form_with url: new_booking_path, method: :get, local: true do |form| %>
+          <%= form.hidden_field :num_passengers, value: params[:num_passengers] %>
+          
+          <div class="flights-list">
+            <% @flights.each do |flight| %>
+              <div class="flight-option">
+                <%= form.radio_button :flight_id, flight.id, id: "flight_#{flight.id}" %>
+                <%= form.label "flight_#{flight.id}", class: "flight-label" do %>
+                  <div class="flight-card">
+                    <div class="flight-route">
+                      <div class="departure">
+                        <div class="airport-code"><%= flight.departure_airport.airport_code %></div>
+                        <div class="time"><%= flight.formatted_departure_time %></div>
+                        <div class="airport-name"><%= flight.departure_airport.name %></div>
+                      </div>
+                      
+                      <div class="flight-duration">
+                        <div class="duration"><%= flight.duration_formatted %></div>
+                        <div class="arrow">✈️</div>
+                      </div>
+                      
+                      <div class="arrival">
+                        <div class="airport-code"><%= flight.arrival_airport.airport_code %></div>
+                        <div class="time"><%= flight.formatted_arrival_time %></div>
+                        <div class="airport-name"><%= flight.arrival_airport.name %></div>
+                      </div>
+                    </div>
+                    
+                    <div class="flight-details">
+                      <div class="flight-number">Flight #<%= flight.id %></div>
+                      <div class="date"><%= flight.start_datetime.strftime("%B %d, %Y") %></div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+          
+          <div class="booking-actions">
+            <%= form.submit "Book Selected Flight", class: "btn btn-success btn-large" %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="no-results">
+          <p>No flights found for your search criteria.</p>
+          <p>Try different dates or airports.</p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

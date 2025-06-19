@@ -1,0 +1,86 @@
+<div class="container">
+  <div class="confirmation-header">
+    <h1>✅ Booking Confirmed!</h1>
+    <p class="confirmation-number">Confirmation Number: <strong>#<%= @booking.id.to_s.rjust(6, '0') %></strong></p>
+  </div>
+
+  <!-- Flight Details -->
+  <div class="booking-details">
+    <h2>Flight Information</h2>
+    <div class="flight-card">
+      <div class="flight-route">
+        <div class="departure">
+          <h3><%= @booking.flight.departure_airport.airport_code %></h3>
+          <p><%= @booking.flight.departure_airport.name %></p>
+          <p class="time"><%= @booking.flight.formatted_departure_time %></p>
+        </div>
+        
+        <div class="flight-duration">
+          <div class="duration"><%= @booking.flight.duration_formatted %></div>
+          <div class="arrow">✈️</div>
+        </div>
+        
+        <div class="arrival">
+          <h3><%= @booking.flight.arrival_airport.airport_code %></h3>
+          <p><%= @booking.flight.arrival_airport.name %></p>
+          <p class="time"><%= @booking.flight.formatted_arrival_time %></p>
+        </div>
+      </div>
+      
+      <div class="flight-info">
+        <p><strong>Date:</strong> <%= @booking.flight.start_datetime.strftime("%B %d, %Y") %></p>
+        <p><strong>Flight Number:</strong> OA<%= @booking.flight.id %></p>
+        <p><strong>Duration:</strong> <%= @booking.flight.duration_formatted %></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Passenger Information -->
+  <div class="passengers-section">
+    <h2>Passengers (<%= @booking.passengers.count %>)</h2>
+    <div class="passengers-list">
+      <% @booking.passengers.each_with_index do |passenger, index| %>
+        <div class="passenger-info">
+          <h4>Passenger <%= index + 1 %></h4>
+          <p><strong>Name:</strong> <%= passenger.name %></p>
+          <p><strong>Email:</strong> <%= passenger.email %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Booking Summary -->
+  <div class="booking-summary">
+    <h2>Payment Summary</h2>
+    <div class="summary-details">
+      <div class="summary-line">
+        <span>Fare per passenger:</span>
+        <span>$<%= number_with_delimiter((@booking.total_cost / @booking.total_passengers).round) %></span>
+      </div>
+      <div class="summary-line">
+        <span>Number of passengers:</span>
+        <span><%= @booking.total_passengers %></span>
+      </div>
+      <div class="summary-line total">
+        <span><strong>Total Paid:</strong></span>
+        <span><strong>$<%= number_with_delimiter(@booking.total_cost) %></strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Steps -->
+  <div class="next-steps">
+    <h2>What's Next?</h2>
+    <ul>
+      <li>📧 Check your email for detailed confirmation and e-tickets</li>
+      <li>🆔 Bring valid ID and arrive at the airport 2 hours before departure</li>
+      <li>📱 Download the Odin Airlines app for real-time updates</li>
+      <li>🧳 Review baggage allowances and policies</li>
+    </ul>
+  </div>
+
+  <div class="actions">
+    <%= link_to "Book Another Flight", flights_path, class: "btn btn-primary" %>
+    <button onclick="window.print()" class="btn btn-secondary">Print Confirmation</button>
+  </div>
+</div>

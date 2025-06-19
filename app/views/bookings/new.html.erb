@@ -1,0 +1,100 @@
+<div class="container">
+  <div class="booking-header">
+    <h1>Complete Your Booking</h1>
+    <p>Please provide passenger information for your flight</p>
+  </div>
+
+  <!-- Flight Summary -->
+  <div class="flight-summary">
+    <h2>Flight Details</h2>
+    <div class="flight-info">
+      <div class="route">
+        <span class="departure">
+          <strong><%= @flight.departure_airport.airport_code %></strong>
+          <%= @flight.departure_airport.name %>
+        </span>
+        <span class="arrow">→</span>
+        <span class="arrival">
+          <strong><%= @flight.arrival_airport.airport_code %></strong>
+          <%= @flight.arrival_airport.name %>
+        </span>
+      </div>
+      <div class="times">
+        <span>Departure: <%= @flight.start_datetime.strftime("%B %d, %Y at %I:%M %p") %></span>
+        <span>Duration: <%= @flight.duration_formatted %></span>
+        <span>Passengers: <%= @num_passengers %></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Passenger Information Form -->
+  <div class="passenger-form-section">
+    <h2>Passenger Information</h2>
+    
+    <% if @booking.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><%= pluralize(@booking.errors.count, "error") %> prohibited this booking from being saved:</h4>
+        <ul>
+          <% @booking.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form_with model: @booking, local: true do |form| %>
+      <%= form.hidden_field :flight_id %>
+      <%= form.hidden_field :total_passengers %>
+      
+      <div class="passengers-list">
+        <%= form.fields_for :passengers do |passenger_form| %>
+          <div class="passenger-card">
+            <h3>Passenger <%= passenger_form.index + 1 %></h3>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <%= passenger_form.label :name, "Full Name" %>
+                <%= passenger_form.text_field :name, class: "form-control", placeholder: "Enter full name" %>
+                <% if @booking.errors["passengers.name"].any? %>
+                  <div class="error-message"><%= @booking.errors["passengers.name"].first %></div>
+                <% end %>
+              </div>
+              
+              <div class="form-group">
+                <%= passenger_form.label :email, "Email Address" %>
+                <%= passenger_form.email_field :email, class: "form-control", placeholder: "passenger@example.com" %>
+                <% if @booking.errors["passengers.email"].any? %>
+                  <div class="error-message"><%= @booking.errors["passengers.email"].first %></div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      
+      <!-- Booking Summary -->
+      <div class="booking-summary">
+        <h3>Booking Summary</h3>
+        <div class="summary-details">
+          <div class="summary-line">
+            <span>Base fare (per person):</span>
+            <span>$<%= number_with_delimiter((@booking.total_cost / @num_passengers).round) %></span>
+          </div>
+          <div class="summary-line">
+            <span>Number of passengers:</span>
+            <span><%= @num_passengers %></span>
+          </div>
+          <div class="summary-line total">
+            <span><strong>Total Cost:</strong></span>
+            <span><strong>$<%= number_with_delimiter(@booking.total_cost) %></strong></span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <%= form.submit "Complete Booking", class: "btn btn-success btn-large" %>
+        <%= link_to "Back to Flight Search", flights_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
