@@ -1,5 +1,5 @@
 class BookingsController < ApplicationController
-  before_action :validate_flight_selection, only: [:new]
+  before_action :validate_flight_selection, only: [ :new ]
 
   def new
     @flight = Flight.find(params[:flight_id])
