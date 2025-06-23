@@ -9,11 +9,12 @@
  * Consider organizing styles into separate files for maintainability.
  */
 /* Application Styles for Flight Booker */
-/* Application Styles for Flight Booker - Burgundy Theme */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -447,7 +448,7 @@ body {
 
 /* Navigation Styles */
 .navbar {
-  background-color: #333;
+  background-color: #8B1538;
   padding: 15px 20px;
   margin-bottom: 0;
 }
